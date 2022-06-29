@@ -34,9 +34,11 @@ namespace JokesAppTest.Controllers
         }
 
         // POST: Jokes/ShowSearchResults
-        public string ShowSearchResults(String SearchPhrase)
+        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
         {
-            return "value entered" + SearchPhrase;
+            return _context.Joke != null ?
+                          View("Index", await _context.Joke.Where(j=> j.JokeQuestion.Contains(SearchPhrase)).ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Joke'  is null.");
         }
 
         // GET: Jokes/Details/5
